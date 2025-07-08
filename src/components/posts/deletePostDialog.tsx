@@ -2,13 +2,7 @@ import { PostData } from "@/lib/type";
 import { Button } from "../ui/button";
 import { useDeletePostMutation } from "./mutation";
 import LoadingButton from "../loading-button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@radix-ui/react-dialog";
-import { AlertDialogFooter, AlertDialogHeader } from "../ui/alert-dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 
 interface DeletePostDialogProps {
   post: PostData;
@@ -30,14 +24,14 @@ export default function DeletePostDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent>
+    <AlertDialog open={open} onOpenChange={handleOpenChange}>
+      <AlertDialogContent>
         <AlertDialogHeader>
-          <DialogTitle>Delete post?</DialogTitle>
-          <DialogDescription>
+          <AlertDialogTitle>Delete post?</AlertDialogTitle>
+          <AlertDialogDescription>
             Are you sure you want to delete this post? This action cannot be
             undone.
-          </DialogDescription>
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <LoadingButton
@@ -55,7 +49,7 @@ export default function DeletePostDialog({
             Cancel
           </Button>
         </AlertDialogFooter>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

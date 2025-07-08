@@ -32,20 +32,20 @@ export const fileRouter = {
         `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
       );
 
-    //   await Promise.all([
-    //     prisma.user.update({
-    //       where: { id: metadata.user.id },
-    //       data: {
-    //         avatarUrl: newAvatarUrl,
-    //       },
-    //     }),
-    //     streamServerClient.partialUpdateUser({
-    //       id: metadata.user.id,
-    //       set: {
-    //         image: newAvatarUrl,
-    //       },
-    //     }),
-    //   ]);
+      await Promise.all([
+        prisma.user.update({
+          where: { id: metadata.user.id },
+          data: {
+            avatarUrl: newAvatarUrl,
+          },
+        }),
+        // streamServerClient.partialUpdateUser({
+        //   id: metadata.user.id,
+        //   set: {
+        //     image: newAvatarUrl,
+        //   },
+        // }),
+      ]);
 
       return { avatarUrl: newAvatarUrl };
     }),
