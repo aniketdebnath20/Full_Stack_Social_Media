@@ -3,7 +3,11 @@ import prisma from "@/lib/prisma";
 import { createUploadthing, FileRouter } from "uploadthing/next";
 import { UploadThingError, UTApi } from "uploadthing/server";
 
-const f = createUploadthing();
+// ✅ createUploadthing with token
+const f = createUploadthing({
+  token: process.env.UPLOADTHING_TOKEN!,
+});
+
 
 export const fileRouter = {
   avatar: f({
@@ -58,7 +62,7 @@ export const fileRouter = {
 
       if (!user) throw new UploadThingError("Unauthorized");
 
-      return {};
+      return { };
     })
     .onUploadComplete(async ({ file }) => {
       const media = await prisma.media.create({

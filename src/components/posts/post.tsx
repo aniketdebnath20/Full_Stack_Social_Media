@@ -1,13 +1,16 @@
 "use client";
 
+import { PostData } from "@/lib/type";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 import Link from "next/link";
+import UserTooltip from "../userTooltip";
 import UserAvatar from "../userAvatar";
 import { useSession } from "@/app/(main)/sessionProvider";
-import { PostData } from "@/lib/type";
-import UserTooltip from "../userTooltip";
 import PostMoreButton from "./postDeleteSkeleton";
-import { useRelativeTime } from "@/hooks/useRElativeTime";
 import Linkify from "../linkify";
+import { useRelativeTime } from "@/hooks/useRElativeTime";
+import { Media } from "@/generated/prisma";
 
 interface PostProps {
   post: PostData;
@@ -36,10 +39,10 @@ export default function Post({ post }: PostProps) {
             </UserTooltip>
             <Link
               href={`/posts/${post.id}`}
-              className="text-muted-foreground block text-[14px] opacity-40 hover:underline"
+              className="text-muted-foreground block text-sm hover:underline"
               suppressHydrationWarning
             >
-              {useRelativeTime(new Date(post.createdAt))}
+              {useRelativeTime(post.createdAt)}
             </Link>
           </div>
         </div>
@@ -53,6 +56,103 @@ export default function Post({ post }: PostProps) {
       <Linkify>
         <div className="break-words whitespace-pre-line">{post.content}</div>
       </Linkify>
+      {!!post.attachments.length && (
+        <MediaPreviews attachments={post.attachments} />
+      )}
+      {/* <hr className="text-muted-foreground" /> */}
+      {/*
+      <div className="flex justify-between gap-5">
+        <div className="flex items-center gap-5">
+          <LikeButton
+            postId={post.id}
+            initialState={{
+              likes: post._count.likes,
+              isLikedByUser: post.likes.some((like) => like.userId === user.id),
+            }}
+          />
+           <CommentButton
+            post={post}
+            onClick={() => setShowComments(!showComments)}
+          />
+        </div>
+        <BookmarkButton
+          postId={post.id}
+          initialState={{
+            isBookmarkedByUser: post.bookmarks.some(
+              (bookmark) => bookmark.userId === user.id,
+            ),
+          }}
+        />
+      </div>
+      {showComments && <Comments post={post} />} */}
     </article>
   );
 }
+
+interface MediaPreviewsProps {
+  attachments: Media[];
+}
+
+function MediaPreviews({ attachments }: MediaPreviewsProps) {
+  return (
+    <div
+      className={cn(
+        "flex flex-col gap-3",
+        attachments.length > 1 && "sm:grid sm:grid-cols-2",
+      )}
+    >
+      {attachments.map((m) => (
+        <MediaPreview key={m.id} media={m} />
+      ))}
+    </div>
+  );
+}
+
+interface MediaPreviewProps {
+  media: Media;
+}
+
+function MediaPreview({ media }: MediaPreviewProps) {
+  if (media.type === "IMAGE") {
+    return (
+      <Image
+        src={media.url}
+        alt="Attachment"
+        width={500}
+        height={500}
+        className="mx-auto size-fit max-h-[30rem] rounded-2xl"
+      />
+    );
+  }
+
+  if (media.type === "VIDEO") {
+    return (
+      <div>
+        <video
+          src={media.url}
+          controls
+          className="mx-auto size-fit max-h-[30rem] rounded-2xl"
+        />
+      </div>
+    );
+  }
+
+  return <p className="text-destructive">Unsupported media type</p>;
+}
+
+// interface CommentButtonProps {
+//   post: PostData;
+//   onClick: () => void;
+// }
+
+// function CommentButton({ post, onClick }: CommentButtonProps) {
+//   return (
+//     <button onClick={onClick} className="flex items-center gap-2">
+//       <MessageSquare className="size-5" />
+//       <span className="text-sm font-medium tabular-nums">
+//         {post._count.comments}{" "}
+//         <span className="hidden sm:inline">comments</span>
+//       </span>
+//     </button>
+//   );
+// }
