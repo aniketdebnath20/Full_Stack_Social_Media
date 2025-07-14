@@ -1,6 +1,6 @@
 import { validateRequest } from "@/auth/page";
 import prisma from "@/lib/prisma";
-import { LikeInfo } from "@/lib/type";
+import { BookmarkInfo } from "@/lib/type";
 
 export async function GET(
   req: Request,
@@ -13,32 +13,17 @@ export async function GET(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const post = await prisma.bookmark.findUnique({
-      where: { id: postId },
-      select: {
-        bookmark: {
-          where: {
-            userId: loggedInUser.id,
-          },
-          select: {
-            userId: true,
-          },
-        },
-        _count: {
-          select: {
-            likes: true,
-          },
+    const bookmark = await prisma.bookmark.findUnique({
+      where: {
+        userId_postId: {
+          userId: loggedInUser.id,
+          postId: postId,
         },
       },
     });
 
-    if (!post) {
-      return Response.json({ error: "Post not found" }, { status: 404 });
-    }
-
-    const data: LikeInfo = {
-      likes: post._count.likes,
-      isLikedByUser: !!post.likes.length,
+    const data: BookmarkInfo = {
+      isBookmarkedByUser: !!bookmark,
     };
 
     return Response.json(data);
@@ -59,18 +44,20 @@ export async function POST(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const post = await prisma.bookmark.findUnique({
-      where: { id: postId },
-      select: {
-        userId: true,
+    await prisma.bookmark.upsert({
+      where: {
+        userId_postId: {
+          userId: loggedInUser.id,
+          postId: postId,
+        },
       },
+      create: {
+        userId: loggedInUser.id,
+        postId,
+      },
+
+      update: {},
     });
-
-    if (!post) {
-      return Response.json({ error: "Post not found" }, { status: 404 });
-    }
-
-    
 
     return new Response();
   } catch (error) {
@@ -90,18 +77,12 @@ export async function DELETE(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const post = await prisma.post.findUnique({
-      where: { id: postId },
-      select: {
-        userId: true,
+    await prisma.bookmark.deleteMany({
+      where: {
+        userId: loggedInUser.id,
+        postId: postId,
       },
     });
-
-    if (!post) {
-      return Response.json({ error: "Post not found" }, { status: 404 });
-    }
-
-
 
     return new Response();
   } catch (error) {

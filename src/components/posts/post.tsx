@@ -12,6 +12,7 @@ import Linkify from "../linkify";
 import { useRelativeTime } from "@/hooks/useRElativeTime";
 import { Media } from "@/generated/prisma";
 import LikeButton from "./likeButton";
+import BookmarkButton from "./bookmarkButton";
 
 interface PostProps {
   post: PostData;
@@ -76,8 +77,8 @@ export default function Post({ post }: PostProps) {
       {/* <CommentButton
             post={post}
             onClick={() => setShowComments(!showComments)}
-          />
-        </div>
+          /> */}
+        {/* </div> */}
         <BookmarkButton
           postId={post.id}
           initialState={{
@@ -86,8 +87,8 @@ export default function Post({ post }: PostProps) {
             ),
           }}
         />
-      </div>
-      {showComments && <Comments post={post} />} */}
+      {/* </div> */}
+      {/* // {showComments && <Comments post={post} />} */}
     </article>
   );
 }
