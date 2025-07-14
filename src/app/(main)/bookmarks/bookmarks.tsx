@@ -21,7 +21,7 @@ export default function Bookmarks() {
     queryFn: ({ pageParam }) =>
       kyInstance
         .get(
-          "/api/posts/bookmarked",
+          "/api/post/bookmarked",
           pageParam ? { searchParams: { cursor: pageParam } } : {},
         )
         .json<PostsPage>(),
