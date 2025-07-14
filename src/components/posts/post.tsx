@@ -11,6 +11,7 @@ import PostMoreButton from "./postDeleteSkeleton";
 import Linkify from "../linkify";
 import { useRelativeTime } from "@/hooks/useRElativeTime";
 import { Media } from "@/generated/prisma";
+import LikeButton from "./likeButton";
 
 interface PostProps {
   post: PostData;
@@ -59,8 +60,7 @@ export default function Post({ post }: PostProps) {
       {!!post.attachments.length && (
         <MediaPreviews attachments={post.attachments} />
       )}
-      {/* <hr className="text-muted-foreground" /> */}
-      {/*
+      <hr className="text-muted-foreground" />
       <div className="flex justify-between gap-5">
         <div className="flex items-center gap-5">
           <LikeButton
@@ -70,7 +70,10 @@ export default function Post({ post }: PostProps) {
               isLikedByUser: post.likes.some((like) => like.userId === user.id),
             }}
           />
-           <CommentButton
+        </div>
+      </div>
+
+      {/* <CommentButton
             post={post}
             onClick={() => setShowComments(!showComments)}
           />

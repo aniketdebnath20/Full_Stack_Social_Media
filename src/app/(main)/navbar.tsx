@@ -11,7 +11,7 @@ export default function Navbar() {
         </Link>
 
         <SearchField />
-        <UserButton className="sm:ms-auto" />
+        <UserButton className="sm:ms-auto" /> 
       </div>
     </header>
   );
