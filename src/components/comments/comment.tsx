@@ -23,7 +23,7 @@ export default function Comment({ comment }: CommentProps) {
         </UserTooltip>
       </span>
       <div>
-        <div className="flex items-center gap-1 text-sm">
+        <div className="flex items-center gap-2 text-sm">
           <UserTooltip user={comment.user}>
             <Link
               href={`/users/${comment.user.username}`}
