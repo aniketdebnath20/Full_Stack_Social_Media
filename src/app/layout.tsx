@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | bugbook",
     default: "bugbook",
   },
-  description: "The socila media app for powerneds",
+  description: "The social media app for power nerds",
 };
 
 export default function RootLayout({
@@ -32,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
