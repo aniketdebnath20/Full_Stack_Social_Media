@@ -84,18 +84,18 @@ export async function POST(
         },
         update: {},
       }),
-        ...(loggedInUser.id !== post.userId
-          ? [
-              prisma.notification.create({
-                data: {
-                  issuerId: loggedInUser.id,
-                  recipientId: post.userId,
-                  postId,
-                  type: "LIKE",
-                },
-              }),
-            ]
-          : []),
+      ...(loggedInUser.id !== post.userId
+        ? [
+            prisma.notification.create({
+              data: {
+                issuerId: loggedInUser.id,
+                recipientId: post.userId,
+                postId,
+                type: "LIKE",
+              },
+            }),
+          ]
+        : []),
     ]);
 
     return new Response();
@@ -105,10 +105,59 @@ export async function POST(
   }
 }
 
+// export async function DELETE(
+//   req: Request,
+//   { params: { postId } }: { params: { postId: string } },
+// ) {
+//   try {
+//     const { user: loggedInUser } = await validateRequest();
+
+//     if (!loggedInUser) {
+//       return Response.json({ error: "Unauthorized" }, { status: 401 });
+//     }
+
+//     const post = await prisma.post.findUnique({
+//       where: { id: postId },
+//       select: {
+//         userId: true,
+//       },
+//     });
+
+//     if (!post) {
+//       return Response.json({ error: "Post not found" }, { status: 404 });
+//     }
+
+//     await prisma.$transaction([
+//       prisma.like.deleteMany({
+//         where: {
+//           userId: loggedInUser.id,
+//           postId,
+//         },
+//       }),
+//       prisma.notification.deleteMany({
+//         where: {
+//           issuerId: loggedInUser.id,
+//           recipientId: post.userId,
+//           postId,
+//           type: "LIKE",
+//         },
+//       }),
+//     ]);
+
+//     return new Response();
+//   } catch (error) {
+//     console.error(error);
+//     return Response.json({ error: "Internal server error" }, { status: 500 });
+//   }
+// }
+
+
 export async function DELETE(
   req: Request,
-  { params: { postId } }: { params: { postId: string } },
+  context: { params: Promise<{ postId: string }> }
 ) {
+  const { postId } = await context.params; // ✅ await here
+
   try {
     const { user: loggedInUser } = await validateRequest();
 
@@ -118,9 +167,7 @@ export async function DELETE(
 
     const post = await prisma.post.findUnique({
       where: { id: postId },
-      select: {
-        userId: true,
-      },
+      select: { userId: true },
     });
 
     if (!post) {
@@ -129,10 +176,7 @@ export async function DELETE(
 
     await prisma.$transaction([
       prisma.like.deleteMany({
-        where: {
-          userId: loggedInUser.id,
-          postId,
-        },
+        where: { userId: loggedInUser.id, postId },
       }),
       prisma.notification.deleteMany({
         where: {

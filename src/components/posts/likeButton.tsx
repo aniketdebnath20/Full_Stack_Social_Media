@@ -32,8 +32,8 @@ export default function LikeButton({ postId, initialState }: LikeButtonProps) {
   const { mutate } = useMutation({
     mutationFn: () =>
       data.isLikedByUser
-    ? kyInstance.post(`/api/post/${postId}/likes`)
-    : kyInstance.delete(`/api/post/${postId}/likes`),
+        ? kyInstance.delete(`/api/post/${postId}/likes`)
+        : kyInstance.post(`/api/post/${postId}/likes`),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey });
 
@@ -50,7 +50,7 @@ export default function LikeButton({ postId, initialState }: LikeButtonProps) {
     onError(error, variables, context) {
       queryClient.setQueryData(queryKey, context?.previousState);
       console.error(error);
-      toast( "Something went wrong. Please try again.");
+      toast("Something went wrong. Please try again.");
     },
   });
 
