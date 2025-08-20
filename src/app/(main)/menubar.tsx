@@ -1,7 +1,7 @@
 import { validateRequest } from "@/auth/page";
 import { Button } from "@/components/ui/button";
 import prisma from "@/lib/prisma";
-import streamServerClient from "@/lib/stream";
+// import streamServerClient from "@/lib/stream";
 import { Bookmark, Home } from "lucide-react";
 import Link from "next/link";
 import NotificationsButton from "./notificationButton";
@@ -23,7 +23,7 @@ export default async function MenuBar({ className }: MenuBarProps) {
         read: false,
       },
     }),
-    (await streamServerClient.getUnreadCount(user.id)).total_unread_count,
+    // (await streamServerClient.getUnreadCount(user.id)).total_unread_count,
   ]);
 
   return (

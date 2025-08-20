@@ -84,18 +84,18 @@ export async function POST(
         },
         update: {},
       }),
-      //   ...(loggedInUser.id !== post.userId
-      //     ? [
-      //         prisma.notification.create({
-      //           data: {
-      //             issuerId: loggedInUser.id,
-      //             recipientId: post.userId,
-      //             postId,
-      //             type: "LIKE",
-      //           },
-      //         }),
-      //       ]
-      //     : []),
+        ...(loggedInUser.id !== post.userId
+          ? [
+              prisma.notification.create({
+                data: {
+                  issuerId: loggedInUser.id,
+                  recipientId: post.userId,
+                  postId,
+                  type: "LIKE",
+                },
+              }),
+            ]
+          : []),
     ]);
 
     return new Response();
