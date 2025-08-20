@@ -4,8 +4,8 @@ import prisma from "@/lib/prisma";
 import streamServerClient from "@/lib/stream";
 import { Bookmark, Home } from "lucide-react";
 import Link from "next/link";
-import MessagesButton from "./MessagesButton";
-import NotificationsButton from "./NotificationsButton";
+import NotificationsButton from "./notificationButton";
+import MessagesButton from "./messageButton";
 
 interface MenuBarProps {
   className?: string;

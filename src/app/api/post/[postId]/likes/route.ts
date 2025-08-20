@@ -134,14 +134,14 @@ export async function DELETE(
           postId,
         },
       }),
-    //   prisma.notification.deleteMany({
-    //     where: {
-    //       issuerId: loggedInUser.id,
-    //       recipientId: post.userId,
-    //       postId,
-    //       type: "LIKE",
-    //     },
-    //   }),
+      prisma.notification.deleteMany({
+        where: {
+          issuerId: loggedInUser.id,
+          recipientId: post.userId,
+          postId,
+          type: "LIKE",
+        },
+      }),
     ]);
 
     return new Response();
