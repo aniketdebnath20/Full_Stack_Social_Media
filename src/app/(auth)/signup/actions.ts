@@ -1,7 +1,7 @@
 "use server";
 import { lucia } from "@/auth/page";
 import prisma from "@/lib/prisma";
-// import streamServerClient from "@/lib/stream";
+import streamServerClient from "@/lib/stream";
 import { signUpSchema, SignUpValues } from "@/lib/validation";
 import { hash } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
@@ -64,11 +64,11 @@ export async function signUp(
           passwordHash,
         },
       });
-      // await streamServerClient.upsertUser({
-      //   id: userId,
-      //   username,
-      //   name: username,
-      // });
+      await streamServerClient.upsertUser({
+        id: userId,
+        username,
+        name: username,
+      });
     });
 
     const session = await lucia.createSession(userId, {});

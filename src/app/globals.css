@@ -1,7 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+
+/* @custom-variant dark (&:is(.dark *)); */
+@import "stream-chat-react/dist/css/v2/index.css";
+
+
+
+
 
 @theme inline {
   --color-background: var(--background);
